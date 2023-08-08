@@ -18,7 +18,7 @@ const Interface = forwardRef((props, ref: any) => {
 })
 
 
-const Home: React.FC = () => {
+const Index: React.FC = () => {
   const eventSourceRef = useRef<any>(null);
   const [overlayContent, setOverlayContent] = useState<any>()
 
@@ -49,7 +49,7 @@ const Home: React.FC = () => {
           button.removeEventListener('click', handleClick);
         };
       }
-    }, [handleClick, session]);
+    }, [session]);
 
 
     useEffect(() => {
@@ -97,4 +97,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Index;

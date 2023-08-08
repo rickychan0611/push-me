@@ -4,7 +4,7 @@ import Script from 'next/script'
 export default function Document() {
   return (
     <Html>
-      <title>Don't push me!</title>
+      <title>Push me!</title>
       <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
       <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no" />
       <Head>
@@ -18,8 +18,6 @@ export default function Document() {
           src={'https://maps.googleapis.com/maps/api/js?key=' + process.env.NEXT_PUBLIC_MAP_API + '&libraries=places'}
           async
         ></script> */}
-
-        <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.2.0/aframe/build/aframe-ar.js"></script>
 
         <Script
           async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID}`}
