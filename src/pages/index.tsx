@@ -2,14 +2,15 @@ import React, { useRef, useEffect, useCallback, useState, forwardRef } from 'rea
 import { Canvas, useThree } from '@react-three/fiber';
 import { XR, toggleSession, useXR } from '@react-three/xr';
 import NewBox from '../components/NewBox';
-import Image from 'next/image';
 
 const Interface = forwardRef((props, ref: any) => {
   return (
     <div id="overlay-content" ref={ref}>
       <div className="dom-container">
         <div className="button-container">
-          <button id="actionButton">Enter VR</button>
+          <button id="actionButton" className='p-2 bg-blue-500 rounded m-3 text-white'>
+            Start the game
+          </button>
         </div>
       </div>
     </div>
@@ -36,7 +37,7 @@ const Home: React.FC = () => {
 
       const button = document.getElementById('actionButton');
       if (button) {
-        button.innerText = session ? 'Exit VR' : 'Enter VR';
+        button.innerText = session ? 'Exit AR' : 'Start the game';
       }
     };
 
@@ -61,7 +62,18 @@ const Home: React.FC = () => {
       <>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <NewBox position={[0.5, 0, 0]} goodPhoto={"/images/ava_good.jpg"} badPhoto={"/ava-bad.jpg"}/>
+        <NewBox
+          position={[0.5, 0, -.5]}
+          goodPhoto={"/ava_good.jpg"}
+          badPhoto={"/ava-sad.jpg"}
+          name="Ava"
+        />
+        <NewBox
+          position={[0.5, 0, 0.5]}
+          goodPhoto={"/bella-good.jpg"}
+          badPhoto={"/bella-sad.jpg"}
+          name="Bella"
+        />
       </>
     )
   }
@@ -75,7 +87,6 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <Image src='/ava_good.jpg' alt="pic" width={500} height={500}/>
       <Interface ref={interfaceRef} />
       <Canvas eventSource={eventSourceRef.current} >
         <XR referenceSpace="local">

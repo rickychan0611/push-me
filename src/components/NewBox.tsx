@@ -4,8 +4,10 @@ import { Interactive, useXR } from '@react-three/xr';
 import { Box, Text, useTexture, Plane } from '@react-three/drei';
 import { Clock, CatmullRomCurve3, Vector3 } from 'three';
 
-const NewBox = ({ position, goodPhoto, badPhoto }: { position: any, goodPhoto: string, badPhoto: string }) => {
-  // const texture = useTexture('/images/ava_good.jpg')
+const NewBox = ({ position, goodPhoto, badPhoto, name }: { position: any, goodPhoto: string, badPhoto: string, name: string }) => {
+
+  const [url, setUrl] = useState(badPhoto)
+  const texture = useTexture(url)
   const { session } = useXR();
   const [color, setColor] = useState<any>('blue')
 
@@ -13,6 +15,7 @@ const NewBox = ({ position, goodPhoto, badPhoto }: { position: any, goodPhoto: s
   const textRef = useRef<any>();
   const decimal = 3
   const { camera } = useThree()
+
   const [pos, setPos] = useState({
     x: parseFloat(camera.position.x.toFixed(decimal)),
     y: parseFloat(camera.position.y.toFixed(decimal)),
@@ -77,6 +80,18 @@ const NewBox = ({ position, goodPhoto, badPhoto }: { position: any, goodPhoto: s
   // Variable to store the current parameter along the path
   let t = 0;
 
+  const [block, setBlock] = useState(false)
+
+  const debounce = () => {
+    setTimeout(() => {
+      setBlock(false)
+      setUrl(goodPhoto)
+
+      // setUrl(goodPhoto)
+    }, 1000)
+  }
+
+
   useFrame(() => {
     // Get elapsed time from the clock, apply a scaling factor for speed control
 
@@ -128,19 +143,35 @@ const NewBox = ({ position, goodPhoto, badPhoto }: { position: any, goodPhoto: s
       const tangent = spline.getTangent(t);
 
       // Set the car's position to the current point
-      mesh.current.position.copy(point);
+      // mesh.current.position.copy(point);
 
       // Orient the car's Z-axis to the tangent of the path
-      mesh.current.quaternion.setFromAxisAngle(new Vector3(0, 1, 0), Math.atan2(tangent.x, tangent.z));
+      // mesh.current.quaternion.setFromAxisAngle(new Vector3(0, 1, 0), Math.atan2(tangent.x, tangent.z));
 
 
 
       //=====================touch
-      if (distanceX > -0.2 && distanceZ < 0.3) {
-        mesh.current.position.x = mesh.current.position.x + 0.05
-        setColor("yellow")
+      if (distanceX > -0.6 && distanceX < 0 && distanceZ < 0.6) {
+        mesh.current.position.x = mesh.current.position.x + 0.1
+        setUrl(badPhoto)
+        debounce()
       }
-      else setColor("blue")
+      if (distanceX < 0.6 && distanceX > 0 && distanceZ < 0.6) {
+        mesh.current.position.x = mesh.current.position.x - 0.1
+        setUrl(badPhoto)
+        debounce()
+      }
+      if (distanceZ > -0.6 && distanceZ < 0 && distanceX > -0.3) {
+        mesh.current.position.z = mesh.current.position.z + 0.1
+        setUrl(badPhoto)
+        debounce()
+      }
+      if (distanceZ < 0.6 && distanceZ > 0 && distanceX > -0.3) {
+        mesh.current.position.z = mesh.current.position.z - 0.1
+        setUrl(badPhoto)
+        debounce()
+      }
+
     }
   });
 
@@ -150,25 +181,31 @@ const NewBox = ({ position, goodPhoto, badPhoto }: { position: any, goodPhoto: s
       <Interactive
         onSelect={() => setColor((Math.random() * 0xffffff) | 0)}>
         {/* z, y ,x */}
-        {/* <Box args={[0.3, 0.3, 0.3]} position={[0, 0, 0]} >
-          <meshPhongMaterial color={color} />
-        </Box> */}
-        {/* <Plane  position={[0, 0, 0]}>
+        <Box args={[0.45, 0.45, 0.45]} position={[0, 0, 0]} >
+          <meshBasicMaterial
+            // color={"blue"}
+            map={texture} />
+        </Box>
+        {/* <Plane position={[0, 0, 0]}>
           <meshBasicMaterial map={texture} />
         </Plane> */}
 
         <group ref={textRef}>
-          <Text
-            position={[0, 0.07, 0]} fontSize={0.02} color="#fff" anchorX="center" anchorY="middle">
+          {/* <Text
+            position={[0, 0.6, 0]} fontSize={0.1} color="#fff" anchorX="center" anchorY="middle">
             x: {pos.x}
           </Text>
           <Text
-            position={[0, 0.09, 0]} fontSize={0.02} color="#fff" anchorX="center" anchorY="middle">
+            position={[0, 0.5, 0]} fontSize={0.1} color="#fff" anchorX="center" anchorY="middle">
             y:{pos.y}
           </Text>
           <Text
-            position={[0, 0.11, 0]} fontSize={0.02} color="#fff" anchorX="center" anchorY="middle">
+            position={[0, 0.4, 0]} fontSize={0.1} color="#fff" anchorX="center" anchorY="middle">
             z:{pos.z}
+          </Text> */}
+          <Text
+            position={[0, 0.3, 0]} fontSize={0.1} color="#fff" anchorX="center" anchorY="middle">
+            {name}
           </Text>
         </group>
       </Interactive>

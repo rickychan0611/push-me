@@ -4,7 +4,7 @@ import Script from 'next/script'
 export default function Document() {
   return (
     <Html>
-      <title>Pikadish - suite</title>
+      <title>Don't push me!</title>
       <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
       <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no" />
       <Head>
